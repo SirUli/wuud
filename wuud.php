@@ -202,8 +202,10 @@ while (true) {
             logger("debug", "The door was opened via method " . $resultset[$vtomax]["method"]);
             switch ($resultset[$vtomax]['method']) {
                 case 4:
-                    // Has been opened via the Webinterface
-                    $user="Webinterface";
+                    // Has been opened remotely
+                    $user="Remote";
+                    $method="remotely";
+                    logger("debug", "The door was opened remotely (e.g. via webinterface or SIP)");
                     break;
                 case 6:
                     // Opened via Fingerprint
@@ -211,12 +213,13 @@ while (true) {
                     logger("debug", "The transmitted userid was $ru");
                     $user=$vto2000a[$vto_ip]['userids'][$ru];
                     logger("debug", "The determined user was $user");
+                    $method="fingerprint";
                     break;
                 default:
                     logger("warn", "The opening method " . $resultset[$vtomax]['method'] . "is unknown. Please contact the author of the script for details.");
                     break;
             };
-            logger('info', 'The door was opened on ' . str_replace('%20', ' ', $etime) . ' using method ' . $resultset[$vtomax]['method'] . ' by user ' . $user . ' (' . $ru . ')');
+            logger('info', 'The door was opened on ' . str_replace('%20', ' ', $etime) . ' using ' . $method . ' by user ' . $user . ' (' . $ru . ')');
             notification_telegram($user, str_replace('%20', ' ', $etime));
             unset($etime, $stime, $response, $matches, $user, $ru, $resultset);
         }
