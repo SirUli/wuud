@@ -1,0 +1,13 @@
+language: php
+php:
+  - '7'
+  
+# Curl needs to be enabled manually.
+before_install: echo "extension = curl.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+# Copy the file.
+install:
+  cp config.example.php config.php
+  
+script:
+  php wuud.php
